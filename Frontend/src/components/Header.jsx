@@ -11,6 +11,12 @@ const Header = () => {
                     </Link>
                 </div>
                 <div className="items w-[50%] relative h-[100%] flex justify-end gap-[50px]">
+                    <Link to={'/dashboard'}>
+                    <button className='text-[16px] hover:border-b-2 border-black transition-all'>Dashboard</button>
+                    </Link>
+                    <Link to={'/create'}>
+                    <button className='text-[16px] hover:border-b-2 border-black transition-all'>Create Post</button>
+                    </Link>
                     <Link to={'/authors'}>
                     <button className='text-[16px] hover:border-b-2 border-black transition-all'>Authors</button>
                     </Link>
