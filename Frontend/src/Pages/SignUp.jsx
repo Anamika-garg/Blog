@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom'
 const SignUp = () => {
   return (
     <>
-    <div className="container signup-bg min-h-[100vh] w-[100vw] flex justify-center flex-col">
+    <div className="container login-bg min-h-[100vh] w-[100vw] flex justify-center flex-col">
         <div className="con w-[80%] md:w-[70%] m-auto flex gap-[20px] flex-col">
             <h1 className="text-3xl font-bold">Sign Up</h1>
             <div className="input-fields flex items-center">
