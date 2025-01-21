@@ -3,8 +3,8 @@ import React from 'react'
 const Newsletter = () => {
     return (
         <>
-            <div className="container m-auto w-[80vw] mt-[60px] md:mt-0 min-h-[50vh] flex items-center justify-center flex-col gap-[26px]">
-                <h1 className="text-4xl font-bold mt-8">
+            <div className="container m-auto w-[80vw] min-h-[50vh] flex items-center justify-center flex-col gap-[26px]">
+                <h1 className="text-4xl font-bold md:mt-8 mt-[60px] ">
                     Latest Blogs
                 </h1>
                 <p className='text-center'>Stay updated with the latest news, tips, and exclusive content delivered straight to your inbox.<br></br> Don't miss out!</p>
