@@ -11,3 +11,9 @@ body {
 .box-shadow {
     box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
 }
+
+.login-bg{
+  background: url('/login-bg.png');
+  background-size: auto;
+  background-repeat: no-repeat;
+}
