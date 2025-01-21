@@ -14,6 +14,6 @@ body {
 
 .login-bg{
   background: linear-gradient(rgba(0,0,0,0.1),rgba(0,0,0,0.1)),url('/login-bg.png');
-  background-size: auto;
+  background-size: cover;
   background-repeat: no-repeat;
 }
