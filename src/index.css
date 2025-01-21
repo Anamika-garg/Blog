@@ -1,0 +1,9 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body{
+    scrollbar-width: 0;
+    scroll-behavior: smooth;
+    overflow-x: hidden;
+}
