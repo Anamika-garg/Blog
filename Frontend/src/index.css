@@ -17,3 +17,9 @@ body {
   background-size: auto;
   background-repeat: no-repeat;
 }
+.signup-bg{
+  background: url('/login-bg.png');
+  transform: rotate(360deg);
+  background-size: auto;
+  background-repeat: no-repeat;
+}
