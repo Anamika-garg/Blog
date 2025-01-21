@@ -6,14 +6,14 @@ import { Link } from 'react-router-dom'
 const BlogComp = () => {
     return (
         <>
-            <div className="blog min-h-[350px] w-[350px] bg-white rounded-md overflow-hidden border-2 border-slate-300 cursor-pointer">
+            <div className="blog box-shadow min-h-[350px] w-[350px] bg-white rounded-md overflow-hidden border border-slate-300 cursor-pointer">
                 <div className="img-con w-[100%] relative h-[200px] rounded-md">
                     <img src={bg} alt="" className='absolute h-[100%] w-[100%]'/>
 
                 </div>
                 <div className="content w-[100%] flex flex-col mt-[2px] gap-[3px] px-1">
-                    <div className="upper-head flex justify-between">
-                    <span className='ml-2 text-[15px] font-semibold px-2 py-1 text-white rounded-[6px] bg-black'>Lifestyle</span>
+                    <div className="upper-head flex justify-between mt-1">
+                    <span className='ml-2 text-[13px] font-semibold px-2 py-1 text-white rounded-[6px] bg-black'>Lifestyle</span>
                     <span className='ml-2 text-[15px] font-semibold p-1 text-slate-500'>2 days ago</span>
                     </div>
                     <Link to={'/Blog'}>
