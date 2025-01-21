@@ -11,7 +11,9 @@ const Header = () => {
                     </Link>
                 </div>
                 <div className="items w-[50%] relative h-[100%] flex justify-end gap-[50px]">
+                    <Link to={'/authors'}>
                     <button className='text-[16px] hover:border-b-2 border-black transition-all'>Authors</button>
+                    </Link>
                     <Link to={'/login'}>
                     <button className='text-[16px] hover:border-b-2 border-black transition-all'>Login</button>
                     </Link>
