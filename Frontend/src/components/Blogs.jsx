@@ -4,7 +4,7 @@ import BlogComp from './BlogComp'
 const Blogs = () => {
   return (
     <>
-    <div className="container min-h-[60vh] w-[80vw] m-auto mt-[27px] flex items-center justify-center flex-wrap gap-[40px]"> 
+    <div className="container min-h-[60vh] w-[80vw] m-auto mt-[27px] flex items-center justify-center flex-wrap gap-[40px] pb-5"> 
         <BlogComp/>
         <BlogComp/>
         <BlogComp/>

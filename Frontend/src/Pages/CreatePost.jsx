@@ -1,6 +1,7 @@
 import React from 'react'
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
+import {POST_CATEGORIES} from '../../data'
 
 const CreatePost = () => {
     const modules = {
@@ -19,10 +20,9 @@ const CreatePost = () => {
         'link', 'image'
     ]
 
-    const POST_CATEGORIES = ['Agriculture', "Business", "Education", "Entertainment", "Art", "Investment", "Uncategorized", "Weather"];
     return (
         <>
-            <div className="container min-h-[100vh] w-[100%] md:w-[80%] m-auto flex flex-col gap-[10px] pl-10">
+            <div className="container min-h-[100vh] w-[100%] md:w-[80%] m-auto flex flex-col gap-[10px] pl-10 pb-5">
                 <h1 className="text-3xl font-bold mt-[100px] mb-[20px]">Create Post</h1>
                 <label htmlFor="title" className='w-[90%] relative font-semibold text-xl ml-2'>Title: </label>
                 <input type="text" placeholder='Enter the title of the blog...' className='p-3 border-2 w-[90%] relative h-[50px]' />
@@ -37,7 +37,7 @@ const CreatePost = () => {
                 <label htmlFor="thumbnail" className='w-[90%] relative font-semibold text-xl ml-2'>Upload Thumbnail : </label>
                 <input type="file" accept='png , jpg , jpeg' />
 
-                <button type="submit" className='bg-blue-600 font-semibold w-[200px] h-[40px] mt-[10px] text-white'>Create Post</button>
+                <button type="submit" className='bg-blue-600 font-semibold w-[200px] h-[40px] mt-[10px] rounded-md text-white hover:bg-blue-500 transition-all'>Create Post</button>
             </div>
         </>
     )

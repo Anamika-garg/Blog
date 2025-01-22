@@ -10,7 +10,7 @@ import Comment from '../components/Comment';
 const Blog = () => {
     return (
         <>
-            <div className="container min-h-[100vh] w-full m-auto bg-white flex flex-col items-center justify-center">
+            <div className="container min-h-[100vh] w-full m-auto bg-white flex flex-col items-center justify-center pb-5">
                 <div className="head-con bg-slate-200 flex justify-center min-h-[60vh] w-[100vw]">
                     <div className="heading text-center w-[80%] lg:w-[50%] relative flex items-center justify-center gap-[26px] flex-col min-h-[20px]">
                         <h1 className='text-3xl font-semibold mt-14 lg:mt-0'>

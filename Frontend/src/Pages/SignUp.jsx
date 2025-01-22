@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom'
 const SignUp = () => {
   return (
     <>
-    <div className="container login-bg min-h-[100vh] w-[100vw] flex justify-center flex-col">
+    <div className="cont login-bg min-h-[100vh] w-[100vw] flex justify-center flex-col pb-5">
         <div className="con w-[80%] md:w-[70%] m-auto flex gap-[20px] flex-col">
             <h1 className="text-3xl font-bold">Sign Up</h1>
             <div className="input-fields flex items-center">
@@ -23,7 +23,7 @@ const SignUp = () => {
                 <label htmlFor="email" className='w-[90px] relative font-semibold'>Confirm Password : </label>
                 <input type="password" placeholder='Confirm your Password' className='p-3 border-2 w-[80%] relative h-[50px]' />
             </div>
-            <button className='bg-blue-400 font-semibold text-black w-[150px] px-4 py-2 rounded-md'>Sign up</button>
+            <button className='bg-blue-400 font-semibold text-black w-[150px] px-4 py-2 rounded-md hover:bg-blue-500 transition-all'>Sign up</button>
             <small>Already have an account? <Link to={'/login'} className="text-blue-600">Login</Link> here</small>
         </div>
     </div>

@@ -13,7 +13,7 @@ const BlogComp = () => {
                 </div>
                 <div className="content w-[100%] flex flex-col mt-[2px] gap-[3px] px-1">
                     <div className="upper-head flex justify-between mt-1">
-                    <span className='ml-2 text-[13px] font-semibold px-2 py-1 text-white rounded-[6px] bg-black'>Lifestyle</span>
+                    <span className='ml-2 text-[13px] font-semibold px-2 py-1 flex items-center justify-center text-white rounded-[6px] bg-slate-800'>Lifestyle</span>
                     <span className='ml-2 text-[15px] font-semibold p-1 text-slate-500'>2 days ago</span>
                     </div>
                     <Link to={'/Blog'}>
