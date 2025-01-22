@@ -3,17 +3,17 @@ import { Link } from 'react-router-dom'
 import { GiHamburgerMenu } from "react-icons/gi";
 
 const Header = () => {
-    const [toggle , setToggle] = useState(true);
+    const [toggle , setToggle] = useState(false);
     return (
         <>
             <div className="header flex items-center justify-between h-[70px] fixed w-[100%] border-b-[1px] bg-white z-10">
-                <div className="logo max-w-[50%] pl-20 md:relative h-[100%] flex md:items-center absolute top-5 md:left-0 md:top-0">
+                <div className="logo max-w-[50%] md:pl-20 pl-10 md:relative h-[100%] flex md:items-center absolute top-5 md:left-0 md:top-0">
                     <Link to={'/'}>
                     <h1 className='text-2xl font-bold'>Blogger</h1>
                     </Link>
                 </div>
                 <div className="items md:w-[50%] md:h-[100%] flex justify-end md:gap-[50px] md:top-0 top-[10px] md:flex-row flex-col right-8 absolute w-[200px] md:justify-center md:items-center">
-                    <div className={`hamburger transition-all w-[80%] p-3 flex items-center justify-end md:hidden`}>
+                    <div className={`hamburger transition-all w-[100%] p-3 flex items-center justify-end md:hidden`}>
                     <GiHamburgerMenu className='h-[35px] w-[35px] ' onClick={()=> setToggle(!toggle)}/>
                     </div>
                     <Link to={'/dashboard'}>
