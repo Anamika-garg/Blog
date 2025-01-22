@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import { GiHamburgerMenu } from "react-icons/gi";
 
 const Header = () => {
-    const [toggle , setToggle] = useState(false);
+    const [toggle , setToggle] = useState(true);
     return (
         <>
             <div className="header flex items-center justify-between h-[70px] fixed w-[100%] border-b-[1px] bg-white z-10">
@@ -16,8 +16,8 @@ const Header = () => {
                     <div className={`hamburger transition-all w-[100%] p-3 flex items-center justify-end md:hidden`}>
                     <GiHamburgerMenu className='h-[35px] w-[35px] ' onClick={()=> setToggle(!toggle)}/>
                     </div>
-                    <Link to={'/dashboard'}>
-                    <button className={` ${toggle ? 'visible' : 'hidden'} md:visible text-[16px] border-b-[1px] border-blue-400 md:border-black md:hover:border-b-2 md:border-0 delay-0 bg-white hover:translate-x-1 transition-all w-[100%] p-3`}>Dashboard</button>
+                    <Link to={'/profile'}>
+                    <button className={` ${toggle ? 'visible' : 'hidden'} md:visible text-[16px] border-b-[1px] border-blue-400 md:border-black md:hover:border-b-2 md:border-0 delay-0 bg-white hover:translate-x-1 transition-all w-[100%] p-3`}>Profile</button>
                     </Link>
                     <Link to={'/create'}>
                     <button className={` ${toggle ? 'visible' : 'hidden'} md:visible text-[16px] border-b-[1px] border-blue-400 md:border-black md:hover:border-b-2 md:border-0 delay-75 bg-white hover:translate-x-1 transition-all w-[100%] p-3`}>Create Post</button>

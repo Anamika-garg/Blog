@@ -9,7 +9,7 @@ import Login from './Pages/Login.jsx'
 import SignUp from './Pages/SignUp.jsx'
 import Authors from './Pages/Authors.jsx'
 import CreatePost from './Pages/CreatePost.jsx'
-import Dashboard from './Pages/Dashboard.jsx'
+import Profile from './Pages/Profile.jsx'
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
@@ -22,7 +22,7 @@ createRoot(document.getElementById('root')).render(
           <Route path='/signup' element={<SignUp />} />
           <Route path='/authors' element={<Authors />} />
           <Route path='/create' element={<CreatePost />} />
-          <Route path='/dashboard' element={<Dashboard />} />
+          <Route path='/profile' element={<Profile />} />
         </Route>
       </Routes>
     </BrowserRouter>

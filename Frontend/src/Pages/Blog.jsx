@@ -25,7 +25,7 @@ const Blog = () => {
                     </div>
                 </div>
                 <div className="blog-con container mx-auto lg:w-[70%] relative bg-white min-h-[100vh] z-5 top-[-30px] lg:top-[-80px] rounded-sm flex flex-col border-4">
-                    <div className="img-con h-[60vh] w-[100%] relative bg-red-500">
+                    <div className="img-con h-[40vh] md:w-[100%] w-[90%] m-auto relative bg-red-500">
                         <img src={bg} alt="" className='h-[100%] w-[100%]' />
                     </div>
 

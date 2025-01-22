@@ -2,7 +2,7 @@ import React from 'react'
 import author from '/author.jpg'
 import { FaEdit } from "react-icons/fa";
 
-const Dashboard = () => {
+const Profile = () => {
   return (
     <>
     <div className="container min-h-[100vh] flex-col m-auto items-center w-[100vw] gap-[18px] flex pb-5">
@@ -22,4 +22,4 @@ const Dashboard = () => {
   )
 }
 
-export default Dashboard
+export default Profile;
