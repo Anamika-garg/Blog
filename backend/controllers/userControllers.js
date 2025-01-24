@@ -36,6 +36,7 @@ async function register(req, res, next) {
       });
     }
 
+    const randomPhotoUrl = `${process.env.RANDOM_IMAGE_URL}`;
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
 
@@ -43,6 +44,7 @@ async function register(req, res, next) {
       fullName,
       email: email.toLowerCase(),
       password: hashedPassword,
+      Avatar : randomPhotoUrl
     });
     await newUser.save();
 

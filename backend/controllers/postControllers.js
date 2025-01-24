@@ -7,22 +7,24 @@ const { userComment } = require('../model/UserComment');
 
 async function createPost(req, res, next) {
   try {
-    const { title, desc, category, thumbnail } = req.body;
+    const { title, desc, category } = req.body;
+    console.log( title, desc, category )
 
-    if (!title || !desc || !category || !thumbnail) {
+    console.log(req.file);
+    if (!title || !desc || !category) {
       return res.status(422).json({
         error: "Fill all the details",
       });
     }
 
     const user = req.user;
-    
+    console.log(req.file.cloudinaryUrl)
     const newPost = new Post({
         title,
         desc,
         category,
         authorId : user.id,
-        thumbnail
+        thumbnail : req.file.cloudinaryUrl
     })
     await newPost.save();
 

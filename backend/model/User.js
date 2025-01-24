@@ -19,6 +19,7 @@ const userSchema = new mongoose.Schema({
     },
     Avatar : {
         type : String,
+        required : true
     },
     NoOfPosts : {
         type : Number,

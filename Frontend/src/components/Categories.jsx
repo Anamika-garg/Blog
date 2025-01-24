@@ -13,7 +13,7 @@ const Categories = () => {
       <h1 className="text-2xl font-bold mt-[20px] md:mt-0">Recent Blogs</h1>
       <div className={`flex items-center justify-center gap-[18px] transition-all flex-wrap overflow-hidden ${drop ? 'min-h-[40px]' : 'h-[40px]'}`}>
         {
-          POST_CATEGORIES.map((e) => <Catgory Category={e}/>)
+          POST_CATEGORIES.map((e,i) => <Catgory Category={e} key={i}/>)
         }
         </div>
         {
