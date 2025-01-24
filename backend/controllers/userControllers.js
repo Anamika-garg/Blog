@@ -3,9 +3,11 @@ const { User } = require("../model/User");
 const jwt = require("jsonwebtoken");
 const { Post } = require("../model/Post");
 
+
 // Register User
 // /api/user/register
 async function register(req, res, next) {
+  console.log(req.body)
   const { fullName, email, password, confirmPassword } = req.body;
   if (!fullName || !email || !password || !confirmPassword) {
     return res.status(422).json({
@@ -49,7 +51,7 @@ async function register(req, res, next) {
     await newUser.save();
 
     return res.status(201).json({
-      succss: "User created Successfully",
+      success: "Registration Successfull",
       user: newUser,
     });
   } catch (err) {
@@ -93,7 +95,7 @@ async function login(req, res, next) {
         expiresIn: "1d",
       });
       return res.status(200).json({
-        success: "login Successful!",
+        success: "Login Successful!",
         user: userExists,
         token,
       });
@@ -201,7 +203,7 @@ async function update(req, res, next) {
 
 async function getAuthors(req, res, next) {
   try {
-    const Authors = await User.find();
+    const Authors = await User.find().sort({NoOfPosts : -1});
     console.log(Authors);
     if (Authors) {
       return res.status(200).json({
@@ -220,6 +222,51 @@ async function getAuthors(req, res, next) {
   }
 }
 
+// Profile details
+// /api/user/profile
+
+async function profile(req,res,next){
+  try{
+    const user = req.user;
+    const userInfo = {
+      fullName : user.fullName,
+      email : user.email,
+      avatar : user.Avatar
+    }
+    res.status(200).json({
+      success : "information fetched successfully",
+      user : userInfo
+    })
+  }
+  catch(err){
+    console.log(err);
+    res.status(400).json({
+      error : "Can't fetch your details",
+      err
+    })
+  }
 
 
-module.exports = { register, login, update, getAuthors};
+}
+
+//profile by id
+// /api/user/author/:id
+async function authorById(req,res,next) {
+  try{
+    const id = req.params;
+    
+    const user = await User.findById(id.id);
+    res.status(200).json({
+      success : "information fetched successfully",
+      user
+    })
+  }
+  catch(err){
+    console.log(err);
+    res.status(400).json({
+      error : "Can't fetch the details",
+      err
+    })
+}
+}
+module.exports = { register, login, update, getAuthors ,profile , authorById};

@@ -1,3 +1,26 @@
-export const POST_CATEGORIES = ['All','Agriculture', "Business", "Education", "Entertainment", "Art", "Investment", "Uncategorized", "Weather"];
-
-
+export const POST_CATEGORIES = [
+    'All',
+    'Technology',
+    'Health & Wellness',
+    'Business',
+    'Education',
+    'Entertainment',
+    'Travel',
+    'Food & Recipes',
+    'Lifestyle',
+    'Finance',
+    'Science',
+    'Art & Design',
+    'Sports',
+    'Environment',
+    'Politics',
+    'Parenting',
+    'DIY & Crafts',
+    'Gaming',
+    'Fashion',
+    'Photography',
+    'Real Estate',
+    'News',
+    'Uncategorized',
+  ];
+  

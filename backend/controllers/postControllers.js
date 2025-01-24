@@ -125,7 +125,7 @@ async function getPosts(req,res,next) {
         const id = req.params;
         const post = await Post.findOne({_id : id.id});
         if(post){
-            const comments = await userComment.find({postId : id.id});
+            const comments = await userComment.find({postId : id.id}).sort({ createdAt: -1 });
             const Author = await User.findOne({_id : post.authorId});
             return res.status(200).json({
                 "success"  :"Post fetched successfully",
@@ -225,12 +225,18 @@ async function getPosts(req,res,next) {
         const postId = req.params;
         const {comment} = req.body;
 
+        if(!comment){
+          return res.status(422).json({
+            error : "Empty Comment Field"
+          })
+        }
         const newComment = new userComment({
-            userId : user.id,
+            userId : user._id,
             postId : postId.id,
             comment
         })
 
+        console.log(comment)
         await newComment.save();
 
         await Post.findByIdAndUpdate(postId.id , {

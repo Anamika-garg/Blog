@@ -10,9 +10,11 @@ import SignUp from './Pages/SignUp.jsx'
 import Authors from './Pages/Authors.jsx'
 import CreatePost from './Pages/CreatePost.jsx'
 import Profile from './Pages/Profile.jsx'
+import { AuthProvider } from '../Context/AuthContext.jsx'
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
+    <AuthProvider>
     <BrowserRouter>
       <Routes>
         <Route element={<Layout />}>
@@ -23,8 +25,10 @@ createRoot(document.getElementById('root')).render(
           <Route path='/authors' element={<Authors />} />
           <Route path='/create' element={<CreatePost />} />
           <Route path='/profile' element={<Profile />} />
+          <Route path='/blog/:id' element={<Blog />} />
         </Route>
       </Routes>
     </BrowserRouter>
+    </AuthProvider>
   </StrictMode>,
 )
