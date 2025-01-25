@@ -7,10 +7,7 @@ const postRoutes = require('./routes/postRoutes');
 const cors = require('cors');
 app.use(express.json());
 app.use(express.urlencoded({extended : false}));
-app.use(cors({
-    origin : process.env.FRONTEND_URL,
-    allowedHeaders: 'Content-Type,Authorization',
-}));
+app.use(cors());
 
 mongoose.connect(process.env.MONGO_URI).then(()=>{
     console.log("Connected to database");
