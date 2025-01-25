@@ -8,8 +8,9 @@ const Newsletter = () => {
     }
     const submitHandler = (e) =>{
         e.preventDefault();
+        if(email.includes('@')) toast.success('Success');
+        else toast.error('Enter valid email');
         setEmail('');
-        toast.success('Success');
     }
     return (
         <>

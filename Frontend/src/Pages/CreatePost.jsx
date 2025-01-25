@@ -7,12 +7,14 @@ import { useNavigate } from 'react-router-dom';
 import { toast, ToastContainer } from 'react-toastify';
 import Catgory from '../components/Catgory';
 import axios from 'axios';
+import AnimatedSVG from '../components/AnimatedSVG';
 
 
 const CreatePost = () => {
     const { isAuthenticated , token } = useAuth();
     const navigate = useNavigate();
     const [show , setShow] = useState(true);
+    const [loading , setLoading] = useState(false);
 
     // Redirect to login if not authenticated
     useEffect(()=>{
@@ -33,7 +35,7 @@ const CreatePost = () => {
     const [formData, setFormData] = useState({
         title: '',
         desc: '',
-        category: '',
+        category: POST_CATEGORIES[1],
         thumbnail: null,
     });
 
@@ -80,6 +82,7 @@ const CreatePost = () => {
 
     const handleSubmit = async(e) => {
         e.preventDefault();
+        setLoading(true);
 
         console.log(formData)
         if (!formData.title || !formData.desc || !formData.category || !formData.thumbnail) {
@@ -108,6 +111,7 @@ const CreatePost = () => {
               });
             // console.log(res);
             toast.success(res.data.success);
+            setLoading(false);
             setTimeout(() => {
                 navigate(`/blog/${res.data.Post._id}`)
             }, 1200);
@@ -115,12 +119,17 @@ const CreatePost = () => {
         catch(err){
             console.log(err)
             toast.error(err.response.data.error);
+            setLoading(false);
         }
     };
     return (
         <>
             <div className="container min-h-[100vh] w-[100%] md:w-[80%] m-auto flex flex-col gap-[10px] pl-10 pb-5">
                 {
+                    
+                
+                    loading ? <div className='text-center flex items-center justify-center min-h-[50vh] w-[100vw]'><AnimatedSVG/> </div> :
+                
                     show ? <>
                     <ToastContainer/>
                         <h1 className="text-3xl font-bold mt-[100px] mb-[20px]">Create Post</h1>

@@ -5,6 +5,7 @@ import { useAuth } from '../../Context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import { toast, ToastContainer } from 'react-toastify';
 import axios from 'axios';
+import AnimatedSVG from '../components/AnimatedSVG';
 
 const Profile = () => {
   const navigate = useNavigate();
@@ -125,7 +126,9 @@ const Profile = () => {
               </>
             }
           </>
-            : <ToastContainer />
+            : <><ToastContainer />
+            <AnimatedSVG/>
+            </>
         }
 
       </div>

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import Author from '../components/Author'
 import { toast, ToastContainer } from 'react-toastify';
 import axios from 'axios';
+import AnimatedSVG from '../components/AnimatedSVG';
 const Authors = () => {
   const [authors , setAuthors] = useState([]);
   useEffect(()=>{
@@ -28,7 +29,9 @@ const Authors = () => {
             authors.length > 0 ? authors.map((e,i)=>{
               return <Author key={i} author={e}/>
             })  : 
-            <div>Loading...</div>
+            <div>
+              <AnimatedSVG/>
+            </div>
           }
         </div>
     </div>

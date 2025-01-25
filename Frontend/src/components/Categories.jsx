@@ -6,6 +6,7 @@ import { MdArrowDropUp } from "react-icons/md";
 import axios from 'axios';
 import BlogComp from './BlogComp'
 import { toast, ToastContainer } from 'react-toastify';
+import AnimatedSVG from './AnimatedSVG';
 
 
 const Categories = () => {
@@ -68,7 +69,9 @@ const Categories = () => {
             posts && posts.length >0 ? posts.map((e, i) => {
               return <BlogComp key={i} blog={e} />
             }) : 
-            <div className='text-center font-semibold text-blue-900'>Loading..</div> 
+            <div className='text-center font-semibold text-blue-900'>
+              <AnimatedSVG/>
+            </div> 
           }
         </div>
       </div>
