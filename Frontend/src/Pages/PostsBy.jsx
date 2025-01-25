@@ -16,7 +16,7 @@ const PostsBy = () => {
 
     async function getUserPost() {
         try {
-            if(location.state.name == 'me'){
+            if(location.state.name == 'Me'){
                 const res = await axios.get(`${import.meta.env.VITE_BACKEND_POST_URL}/getUserPosts`, {
                     headers: {
                         Authorization: `Bearer ${localStorage.getItem('authToken')}`
@@ -50,6 +50,7 @@ const PostsBy = () => {
             <div className="container m-auto min-h-[96vh] w-[80vw] relative flex items-center flex-col gap-[40px] flex-wrap pb-7">
                 <ToastContainer/>
                 <div className="text-center text-2xl font-bold relative mt-[90px]"> Posts By {location.state.name} </div>
+                <div className="container min-h-[10vh] w-[80vw] m-auto mt-[27px] flex justify-center flex-wrap gap-[40px] pb-5">
                 {
                     posts.length > 0 ? posts.map((e, i) => {
                         return <BlogComp key={i} blog={e} />
@@ -58,6 +59,7 @@ const PostsBy = () => {
                             <AnimatedSVG/>
                         </div>
                 }
+                </div>
             </div>
         </>
     )

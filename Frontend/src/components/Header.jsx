@@ -12,7 +12,7 @@ const Header = () => {
     const logoutHandler = () =>{
         logout();
         setTimeout(()=>{
-            navigate('/login');
+            navigate('/');
         } , 1000)
     }
 

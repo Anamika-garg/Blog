@@ -9,43 +9,63 @@ import AnimatedSVG from '../components/AnimatedSVG';
 
 const Profile = () => {
   const navigate = useNavigate();
-  const { isAuthenticated, user, logout } = useAuth();
+  const {isAuthenticated , logout } = useAuth();
   const fileInputRef = useRef(null)
   const [loading, setLoading] = useState(false);
   // console.log(user)
-  const [data, setData] = useState({
+  // const [data, setData] = useState({
+  //   fullName: '',
+  //   email: '',
+  //   Avatar: '',
+  // });
+  const [formData, setFormData] = useState({
+    Avatar: '',
     fullName: '',
     email: '',
-    Avatar: '',
-  });
-
-  useEffect(() => {
-    setLoading(true)
-    if (user) {
-      setData({
-        fullName: JSON.parse(user).fullName,
-        email: JSON.parse(user).email,
-        Avatar: JSON.parse(user).Avatar,
-      });
-    }
-    setFormData({ ...formData, 'fullName': data.fullName, 'Avatar': data.Avatar, 'email': data.email })
-
-    if (!isAuthenticated) {
-      loginError();
-    }
-
-    setLoading(false)
-  }, [user]);
-
-  const [formData, setFormData] = useState({
-    Avatar: data.Avatar,
-    fullName: data.fullName,
-    email: data.email,
     currentPassword: '',
     newPassword: '',
     confirmNewPassword: '',
 
   });
+  useEffect(()=>{
+    
+    setLoading(true);
+    const user = localStorage.getItem('user')
+    const parsedData = JSON.parse(user);
+    if(user){
+      setFormData({...formData , 
+        Avatar: parsedData.Avatar,
+        fullName: parsedData.fullName,
+        email: parsedData.email
+      })
+    }
+    else{
+      loginError();
+    }
+    setLoading(false)
+  
+
+  } , [])
+
+  // useEffect(() => {
+  //   setLoading(true)
+  //   console.log(user)
+  //   if (user) {
+  //     setData({
+  //       fullName: JSON.parse(user).fullName,
+  //       email: JSON.parse(user).email,
+  //       Avatar: JSON.parse(user).Avatar,
+  //     });
+  //   }
+  //   else{
+  //     loginError();
+  //   }
+  //   setFormData({ ...formData, 'fullName': data.fullName, 'Avatar': data.Avatar, 'email': data.email })
+
+
+  //   setLoading(false)
+  // }, [user]);
+
 
   // console.log(data)
 
@@ -96,7 +116,7 @@ const Profile = () => {
 
   async function getUserPost(e) {
     e.preventDefault();
-    navigate('/posts', { state: { name: 'me' } });
+    navigate('/posts', { state: { name: 'Me' } });
   }
   return (
     <>
@@ -106,8 +126,8 @@ const Profile = () => {
           loading ? <AnimatedSVG /> :
             isAuthenticated ? <>
               {
-                data && <><div className="profile h-[300px] w-[300px] bg-yellow-500 border-[14px] border-blue-400 rounded-full overflow-hidden mt-[100px]">
-                  <img src={data.Avatar} alt="" className='h-[100%] w-[100%] rounded-full' ref={fileInputRef} />
+                formData && <><div className="profile h-[300px] w-[300px] border-[14px] border-blue-400 rounded-full overflow-hidden mt-[100px]">
+                  <img src={formData.Avatar} alt="" className='h-[100%] w-[100%] rounded-full' ref={fileInputRef} />
                 </div>
                   <FaEdit className='h-[30px] w-[30px] relative top-[-66px] right-[-90px] invisible' onClick={() => {
                     console.log('clicked')
@@ -116,18 +136,23 @@ const Profile = () => {
                   <input type="file" name='Avatar' onChange={changeFileHandler} className='hidden' />
 
                   <button className="text-[16px] text-white font-semibold p-2 bg-blue-500 rounded-md top-[-58px] relative" onClick={getUserPost}>My Posts</button>
+                  {
+                    formData.fullName != '' ? <>
+                      <input type="text" placeholder='Your Full Name' className='top-[-70px] border-2 rounded-md w-[80%] md:w-[50%] relative p-2' name='fullName' value={formData.fullName} onChange={changeHandler} />
 
-                  <input type="text" placeholder='Your Full Name' className='top-[-70px] border-2 rounded-md w-[80%] md:w-[50%] relative p-2' name='fullName' value={formData.fullName} onChange={changeHandler} />
+                      <input type="text" placeholder='Your Current email' value={formData.email} className='top-[-70px] border-2 rounded-md w-[80%] md:w-[50%] relative p-2' disabled />
 
-                  <input type="text" placeholder='Your Current email' value={data.email} className='top-[-70px] border-2 rounded-md w-[80%] md:w-[50%] relative p-2' disabled />
+                      <input type="password" placeholder='Current Password' className='top-[-70px] border-2 rounded-md w-[80%] md:w-[50%] relative p-2' name='currentPassword' value={formData.currentPassword} onChange={changeHandler} />
 
-                  <input type="password" placeholder='Current Password' className='top-[-70px] border-2 rounded-md w-[80%] md:w-[50%] relative p-2' name='currentPassword' value={formData.currentPassword} onChange={changeHandler} />
+                      <input type="password" placeholder='New Password' className='top-[-70px] border-2 rounded-md w-[80%] md:w-[50%] relative p-2' name='newPassword' value={formData.newPassword} onChange={changeHandler} />
 
-                  <input type="password" placeholder='New Password' className='top-[-70px] border-2 rounded-md w-[80%] md:w-[50%] relative p-2' name='newPassword' value={formData.newPassword} onChange={changeHandler} />
+                      <input type="password" placeholder='Confirm new password' className='top-[-70px] border-2 rounded-md w-[80%] md:w-[50%] relative p-2' value={formData.confirmNewPassword} name='confirmNewPassword' onChange={changeHandler} />
 
-                  <input type="password" placeholder='Confirm new password' className='top-[-70px] border-2 rounded-md w-[80%] md:w-[50%] relative p-2' value={formData.confirmNewPassword} name='confirmNewPassword' onChange={changeHandler} />
+                      <button className='top-[-70px] relative bg-blue-600 p-2 px-4 rounded-md text-white' name='confirmNewPassword' onClick={updateProfile}>Update Profile</button>
+                    </> : <AnimatedSVG/>
+                  }
 
-                  <button className='top-[-70px] relative bg-blue-600 p-2 px-4 rounded-md text-white' name='confirmNewPassword' onClick={updateProfile}>Update Profile</button>
+
                 </>
               }
             </>
