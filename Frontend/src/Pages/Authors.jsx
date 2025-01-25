@@ -27,7 +27,8 @@ const Authors = () => {
           {
             authors.length > 0 ? authors.map((e,i)=>{
               return <Author key={i} author={e}/>
-            })  : <div>No Authors Exists</div>
+            })  : 
+            <div>Loading...</div>
           }
         </div>
     </div>

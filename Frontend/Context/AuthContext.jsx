@@ -9,14 +9,14 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
-  const login = (authToken , userData) => {
+  const login = (authToken, userData) => {
     setToken(authToken);
-    setUser(userData);
+    setUser(userData);  // No need to stringify here
     setIsAuthenticated(true);
 
     // Save to localStorage for persistence
     localStorage.setItem('authToken', authToken);
-    localStorage.setItem('user', JSON.stringify(userData));
+    localStorage.setItem('user', JSON.stringify(userData)); // Save user as a string
   };
 
   // Function to log out
@@ -33,9 +33,11 @@ export const AuthProvider = ({ children }) => {
   // Restore authentication state from localStorage
   useEffect(() => {
     const storedToken = localStorage.getItem('authToken');
+    const storedUser = localStorage.getItem('user');
 
     if (storedToken) {
       setToken(storedToken);
+      setUser(storedUser);  
       setIsAuthenticated(true);
     }
   }, []);

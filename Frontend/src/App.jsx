@@ -10,7 +10,7 @@ const App = () => {
     <Newsletter/>
     {/* <Home/> */}
     <Categories/>
-    <Blogs/>
+    {/* <Blogs/> */}
     </>
   )
 }

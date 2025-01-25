@@ -78,7 +78,7 @@ async function getPosts(req,res,next) {
       if(Posts.length != 0){
         return res.status(200).json({
           "success" : "Your Posts fetched successfully",
-          ProgressEvent
+          Posts
         })
       }
       
@@ -86,7 +86,7 @@ async function getPosts(req,res,next) {
         "error" : "No Posts found",
       })
     }catch(err){
-      cosole4.log(err)
+      console.log(err)
       return res.status(400).json({
         error : "Can't fetch your posts",
         err
@@ -97,6 +97,7 @@ async function getPosts(req,res,next) {
   async function getCategoryPost(req,res,next) {
     try{
         const category = req.params;
+        console.log(category)
         const Posts = await Post.find(category);
 
         if(Posts.length != 0){
@@ -151,9 +152,10 @@ async function getPosts(req,res,next) {
         const postId = req.params;
         const post = await Post.findOne({_id : postId.id});
         if(post){
-            const updatePost = await Post.updateOne(
-            { _id: postId.id }, 
-            { $inc: { Likes: 1 } } 
+            const updatePost = await Post.findByIdAndUpdate(
+            postId.id , {
+              $inc : {Likes : 1}
+            }
           );
 
             if(updatePost){
@@ -165,13 +167,15 @@ async function getPosts(req,res,next) {
             }
             else{
                 return res.status(400).json({
-                    'error' : "Try again.",            err
+                    'error' : "Try again.",            
+                    err
                 })
             }
 
         }
         return res.status(400).json({
-            'error' : "Try again.",            err
+            'error' : "Try again.",           
+            err
         })
     }
     catch(err){
@@ -187,9 +191,10 @@ async function getPosts(req,res,next) {
         const postId = req.params;
         const post = await Post.findOne({_id : postId.id});
         if(post && post.Likes != 0){
-            const updatePost = await Post.updateOne(
-            { _id: postId.id }, 
-            { $inc: { Likes: -1 } } 
+          const updatePost = await Post.findByIdAndUpdate(
+            postId.id , {
+              $inc : {Likes : -1}
+            }
           );
 
             if(updatePost){
@@ -259,6 +264,24 @@ async function getPosts(req,res,next) {
     }
   }
 
+  async function getAuthorPosts(req,res,next) {
+    try{
+      const id = req.params;
+      const posts = await Post.find({authorId : id.id});
+      return res.status(200).json({
+        success : 'Post Fetched Successful',
+        Posts : posts
+      })
+    }
+    catch(err){
+      console.log(err)
+      return res.status(200).json({
+        error : 'Some Error Occured',
+        err
+      })
+    }
+  }
+
 module.exports = {
   createPost,
   getPosts ,
@@ -267,5 +290,6 @@ module.exports = {
   getPostById,
   likePost,
   unlikePost,
-  commentonPost
+  commentonPost,
+  getAuthorPosts
 };

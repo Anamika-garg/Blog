@@ -11,6 +11,7 @@ import Authors from './Pages/Authors.jsx'
 import CreatePost from './Pages/CreatePost.jsx'
 import Profile from './Pages/Profile.jsx'
 import { AuthProvider } from '../Context/AuthContext.jsx'
+import PostsBy from './Pages/PostsBy.jsx'
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
@@ -26,6 +27,7 @@ createRoot(document.getElementById('root')).render(
           <Route path='/create' element={<CreatePost />} />
           <Route path='/profile' element={<Profile />} />
           <Route path='/blog/:id' element={<Blog />} />
+          <Route path='/posts' element={<PostsBy />} />
         </Route>
       </Routes>
     </BrowserRouter>

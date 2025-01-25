@@ -2,7 +2,7 @@ const bcrypt = require("bcryptjs");
 const { User } = require("../model/User");
 const jwt = require("jsonwebtoken");
 const { Post } = require("../model/Post");
-
+const axios = require('axios')
 
 // Register User
 // /api/user/register
@@ -38,7 +38,8 @@ async function register(req, res, next) {
       });
     }
 
-    const randomPhotoUrl = `${process.env.RANDOM_IMAGE_URL}`;
+    const randomPhotoUrl = await axios.get(`${process.env.RANDOM_IMAGE_URL}`);
+
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
 
@@ -46,7 +47,7 @@ async function register(req, res, next) {
       fullName,
       email: email.toLowerCase(),
       password: hashedPassword,
-      Avatar : randomPhotoUrl
+      Avatar : randomPhotoUrl.data.message
     });
     await newUser.save();
 
@@ -122,6 +123,12 @@ async function update(req, res, next) {
       newPassword,
       confirmNewPassword,
     } = req.body;
+    console.log(
+      email,
+      fullName,
+      currentPassword,
+      newPassword,
+      confirmNewPassword)
     if (
       !email ||
       !fullName ||
@@ -129,7 +136,7 @@ async function update(req, res, next) {
       !newPassword ||
       !confirmNewPassword
     ) {
-      return res.send(422).json({
+      return res.status(422).json({
         error: "Fill all the details",
       });
     }
@@ -149,11 +156,10 @@ async function update(req, res, next) {
       });
     }
 
-    const userData = req.user;
-    // console.log(user);
-    const user = await User.findOne({_id : userData.id})
+    const user = req.user;
+    console.log(user);
 
-    if(email == userData.email){
+    if(email == user.email){
       const passwordCompare = await bcrypt.compare(
         currentPassword,
         user.password
@@ -167,13 +173,13 @@ async function update(req, res, next) {
       const salt = await bcrypt.genSalt(10);
       const hashedPassword = await bcrypt.hash(newPassword, salt);
   
-      const update = await User.findOneAndUpdate({_id : user.id} ,{
+      const update = await User.findByIdAndUpdate(user._id ,{
         fullName,
         password: hashedPassword,
       });
   
       if (update) {
-        updatedUser = await User.findOne({_id : user.id});
+        updatedUser = await User.findById(user._id);
         return res.status(200).json({
           success: "Information updated successfully",
           updatedUser,
@@ -191,6 +197,7 @@ async function update(req, res, next) {
 
     
   } catch (err) {
+    console.log(err)
     return res.status(400).json({
       error: "Error updating the profile, please try again",
       err

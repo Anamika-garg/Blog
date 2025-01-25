@@ -36,8 +36,8 @@ const BlogComp = ({ blog }) => {
                         <span className='ml-2 text-[15px] font-semibold p-1 text-slate-500'>({formattedTime})</span>
                     </div>
                     <Link to={`/Blog/${blog._id}`}>
-                        <h1 className={`ml-2 text-xl font-semibold hover:underline transition-all`}>{blog.title.slice(0, 9)}</h1>
-                        <p className='ml-2 text-[14px]'  dangerouslySetInnerHTML={{ __html: `${blog.desc.slice(0, 17)}..`}}></p>
+                        <h1 className={`ml-2 text-xl font-semibold hover:underline transition-all`}>{blog.title.slice(0, 30)}...</h1>
+                        <p className='ml-2 text-[14px]'  dangerouslySetInnerHTML={{ __html: `${blog.desc.slice(0, 40)}..`}}></p>
                     </Link>
                 </div>
                 <div className="author flex w-full relative h-[50px] gap-[6px] items-center">
