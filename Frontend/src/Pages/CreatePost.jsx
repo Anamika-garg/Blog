@@ -16,17 +16,20 @@ const CreatePost = () => {
     const [show , setShow] = useState(true);
     const [loading , setLoading] = useState(false);
 
-    // Redirect to login if not authenticated
-    useEffect(()=>{
-        setShow(isAuthenticated);
-    },[]);
-
-    const loginError = () => {
+    useEffect(() => {
+        if (!isAuthenticated) {
+          loginError();
+        } else {
+          setShow(true); 
+        }
+      }, [isAuthenticated]);
+      
+      const loginError = () => {
         toast('You need to login first');
         setTimeout(() => {
-            navigate('/login');
+          navigate('/login');
         }, 1500);
-    };
+      };
 
     if (!show) {
         loginError();
