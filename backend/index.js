@@ -8,12 +8,8 @@ const cors = require('cors');
 app.use(express.json());
 app.use(express.urlencoded({extended : false}));
 app.use(cors({
-  origin: [
-    process.env.FRONTEND_URL,
-    process.env.LOCALHOST_URL
-  ],
-  methods: ['GET', 'POST', 'PUT', 'DELETE' , 'PATCH'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
+    origin : process.env.FRONTEND_URL,
+    allowedHeaders: 'Content-Type,Authorization',
 }));
 
 mongoose.connect(process.env.MONGO_URI).then(()=>{
