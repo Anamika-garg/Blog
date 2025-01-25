@@ -2,7 +2,7 @@ const multer = require("multer");
 const cloudinary = require("cloudinary").v2;
 const { CloudinaryStorage } = require("multer-storage-cloudinary");
 
-// Multer Memory Storage Configuration
+// Multer Cloudinary Storage Configuration
 const storage = new CloudinaryStorage({
   cloudinary: cloudinary,
   params: {
@@ -22,32 +22,18 @@ cloudinary.config({
   secure: true,
 });
 
-// Middleware to Handle File Upload and Cloudinary Upload
+// Middleware to Handle File Upload and Cloudinary Upload (No need to manually handle the upload)
 const uploadToCloudinary = async (req, res, next) => {
   if (!req.file) {
     return res.status(400).json({ error: "No file uploaded!" });
   }
 
   try {
-    // Directly upload the file from memory (no need to save it locally)
-    const result = await cloudinary.uploader.upload_stream(
-      {
-        resource_type: "auto",
-        transformation: [
-          { quality: "auto", fetch_format: "auto" }
-        ],
-      },
-      (error, result) => {
-        if (error) {
-          return res.status(500).json({ error: "Failed to upload file to Cloudinary" });
-        }
+    // req.file.cloudinaryUrl will already be set by multer-storage-cloudinary
+    console.log("File uploaded to Cloudinary:", req.file.cloudinaryUrl);
 
-        req.file.cloudinaryUrl = result.secure_url; // Attach the Cloudinary URL to the request
-        next(); // Proceed to next middleware or route handler
-      }
-    );
-
-    req.file.stream.pipe(result);
+    // Proceed to next middleware or route handler
+    next();
   } catch (error) {
     console.error("Error uploading to Cloudinary:", error);
     res.status(500).json({ error: "Failed to upload file to Cloudinary" });
