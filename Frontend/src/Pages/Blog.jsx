@@ -10,6 +10,7 @@ import { toast, ToastContainer } from 'react-toastify';
 import axios from 'axios';
 import { IoSend } from "react-icons/io5";
 import { formatDistanceToNow } from "date-fns";
+import AnimatedSVG from '../components/AnimatedSVG';
 
 
 
@@ -22,6 +23,7 @@ const Blog = () => {
     const [userData, setUserData] = useState(JSON.parse(localStorage.getItem('user')));
     const [myComment, setMyComment] = useState('');
     const [formattedTime, setformattedTime] = useState('');
+    const [loading , setLoading] = useState(false);
 
 
     useEffect(() => {
@@ -63,6 +65,7 @@ const Blog = () => {
 
     async function fetchDetails() {
         try {
+            setLoading(true);
             const res = await axios.get(`${import.meta.env.VITE_BACKEND_POST_URL}/post/${id}`);
             // console.log(res);
             // console.log(res.data.Post);
@@ -71,7 +74,7 @@ const Blog = () => {
             setCommentData(() => res.data.comments)
             // console.log(commentData);
             console.log('postData.createdAt:', postData?.createdAt);
-
+            setLoading(false);
 
         }
         catch (err) {
@@ -107,6 +110,7 @@ const Blog = () => {
             <div className="container min-h-[100vh] w-full m-auto bg-white flex flex-col items-center justify-center pb-5">
                 <ToastContainer />
                 {
+                    loading ? <AnimatedSVG/> : 
                     postData ? <>
                         <div className="head-con bg-slate-200 flex justify-center min-h-[60vh] w-[100vw]">
                             <div className="heading text-center w-[80%] lg:w-[50%] relative flex items-center justify-center gap-[26px] flex-col min-h-[20px]">
@@ -162,9 +166,7 @@ const Blog = () => {
                             }
                         </div>
                     </> : <><div className='text-xl text-center font-semibold'>
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid" width="200" height="200" style="shape-rendering: auto; display: block; background: rgb(255, 255, 255);" xmlns:xlink="http://www.w3.org/1999/xlink"><g><path stroke="none" fill="#5b8ee1" d="M10 50A40 40 0 0 0 90 50A40 42 0 0 1 10 50">
-                            <animateTransform values="0 50 51;360 50 51" keyTimes="0;1" repeatCount="indefinite" dur="1s" type="rotate" attributeName="transform"></animateTransform>
-                        </path><g></g></g></svg>
+                        
                     </div></>
                 }
 
