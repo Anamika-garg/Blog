@@ -25,7 +25,7 @@ const BlogComp = ({ blog }) => {
     }
     return (
         <>
-            <div className="blog box-shadow min-h-[350px] w-[350px] bg-white rounded-md overflow-hidden border border-slate-300 cursor-pointer">
+            <div className="blog box-shadow min-h-[350px] md:w-[350px] w-[300px] bg-white rounded-md overflow-hidden border border-slate-300 cursor-pointer">
                 <div className="img-con w-[100%] relative h-[200px] rounded-md">
                     <img src={blog.thumbnail} alt="" className='absolute h-[100%] w-[100%]' />
 
