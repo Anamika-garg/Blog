@@ -8,13 +8,13 @@ const cors = require('cors');
 app.use(express.json());
 app.use(express.urlencoded({extended : false}));
 
-const corsOptions = {
-    origin: 'https://anamika-blog-project.vercel.app',
-    methods: 'GET,POST,PUT,DELETE',
-    credentials: true, 
-  };
+// const corsOptions = {
+//     origin: 'https://anamika-blog-project.vercel.app',
+//     methods: 'GET,POST,PUT,DELETE',
+//     credentials: true, 
+//   };
   
-  app.use(cors(corsOptions));
+  app.use(cors());
 
 mongoose.connect(process.env.MONGO_URI).then(()=>{
     console.log("Connected to database");

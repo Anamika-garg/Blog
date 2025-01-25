@@ -22,22 +22,19 @@ cloudinary.config({
   secure: true,
 });
 
-// Middleware to Handle File Upload and Cloudinary Upload (No need to manually handle the upload)
-const uploadToCloudinary = async (req, res, next) => {
+
+// Middleware to Handle File Upload and Cloudinary Upload
+const uploadToCloudinary = (req, res, next) => {
   if (!req.file) {
     return res.status(400).json({ error: "No file uploaded!" });
   }
 
-  try {
-    // req.file.cloudinaryUrl will already be set by multer-storage-cloudinary
-    console.log("File uploaded to Cloudinary:", req.file.cloudinaryUrl);
+  // Log the Cloudinary URL (it could be in secure_url or path)
+  console.log("File uploaded to Cloudinary:", req.file.secure_url || req.file.path);
 
-    // Proceed to next middleware or route handler
-    next();
-  } catch (error) {
-    console.error("Error uploading to Cloudinary:", error);
-    res.status(500).json({ error: "Failed to upload file to Cloudinary" });
-  }
+  req.cloudinaryUrl = req.file.secure_url || req.file.path;
+  // Proceed to the next middleware or route handler
+  next();
 };
 
 module.exports = { upload, uploadToCloudinary };

@@ -18,13 +18,13 @@ async function createPost(req, res, next) {
     }
 
     const user = req.user;
-    console.log(req.file.cloudinaryUrl)
+    console.log(req.cloudinaryUrl)
     const newPost = new Post({
         title,
         desc,
         category,
         authorId : user.id,
-        thumbnail : req.file.cloudinaryUrl
+        thumbnail : req.cloudinaryUrl
     })
     await newPost.save();
 
