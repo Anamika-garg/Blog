@@ -1,32 +1,18 @@
 const multer = require("multer");
 const cloudinary = require("cloudinary").v2;
-const fs = require("fs");
-const path = require("path");
+const { CloudinaryStorage } = require("multer-storage-cloudinary");
 
-// Multer Storage Configuration
-// const storage = multer.diskStorage({
-//   destination: (req, file, cb) => {
-//     cb(null, "./uploads"); 
-//   },
-//   filename: (req, file, cb) => {
-//     const uniqueName = `${Date.now()}-${file.originalname}`;
-//     cb(null, uniqueName);
-//   },
-// });
-
-
-const { CloudinaryStorage } = require('multer-storage-cloudinary');
-
+// Multer Memory Storage Configuration
 const storage = new CloudinaryStorage({
   cloudinary: cloudinary,
   params: {
-    folder: 'your-folder', // specify a folder in Cloudinary
-    allowed_formats: ['jpg', 'png', 'jpeg'], // restrict file formats if needed
+    folder: "your-folder", // specify a folder in Cloudinary
+    allowed_formats: ["jpg", "png", "jpeg"], // restrict file formats if needed
   },
 });
 
+// Create Multer upload middleware
 const upload = multer({ storage: storage });
-
 
 // Cloudinary Configuration
 cloudinary.config({
@@ -43,20 +29,25 @@ const uploadToCloudinary = async (req, res, next) => {
   }
 
   try {
-    const filePath = path.resolve(`./uploads/${req.file.filename}`);
-    const result = await cloudinary.uploader.upload(filePath, {
-      transformation: [
-        { quality: "auto", fetch_format: "auto" }
-      ],
-    });
+    // Directly upload the file from memory (no need to save it locally)
+    const result = await cloudinary.uploader.upload_stream(
+      {
+        resource_type: "auto",
+        transformation: [
+          { quality: "auto", fetch_format: "auto" }
+        ],
+      },
+      (error, result) => {
+        if (error) {
+          return res.status(500).json({ error: "Failed to upload file to Cloudinary" });
+        }
 
-    req.file.cloudinaryUrl = result.secure_url;
+        req.file.cloudinaryUrl = result.secure_url; // Attach the Cloudinary URL to the request
+        next(); // Proceed to next middleware or route handler
+      }
+    );
 
-    // Remove local file after upload
-    fs.unlinkSync(filePath);
-
-    // Proceed to next middleware or route handler
-    next();
+    req.file.stream.pipe(result);
   } catch (error) {
     console.error("Error uploading to Cloudinary:", error);
     res.status(500).json({ error: "Failed to upload file to Cloudinary" });
