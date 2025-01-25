@@ -65,7 +65,7 @@ const Categories = () => {
         <ToastContainer />
         <div className="container min-h-[10vh] w-[80vw] m-auto mt-[27px] flex justify-center flex-wrap gap-[40px] pb-5">
           {
-            posts.length>0 ? posts.map((e, i) => {
+            posts && posts.length >0 ? posts.map((e, i) => {
               return <BlogComp key={i} blog={e} />
             }) : 
             <div className='text-center font-semibold text-blue-900'>Loading..</div> 
