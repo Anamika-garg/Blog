@@ -282,6 +282,40 @@ async function getPosts(req,res,next) {
     }
   }
 
+  async function deletePost(req,res,next) {
+    const id = req.params;
+    const user = req.user;
+    try{
+      const post = await Post.findById(id.id);
+      console.log(post)
+      if(post){
+        
+        if((post.authorId).equals(user._id)){
+          const deletePost = await Post.findByIdAndDelete(id.id);
+          if(deletePost){
+            return res.status(200).json({
+              success : 'Post Deleted Successfully!'
+            })
+          }
+          else{
+            return res.status(422).json({
+              success : 'Some Error Occured!'
+            })
+          }
+        }
+        return res.status(422).json({
+          error : "You can't delete this post"
+        })
+      }
+    }
+    catch(err){
+      console.log(err);
+      return res.status(400).json({
+        error : "Some Error Occured"
+      })
+    }
+  }
+
 module.exports = {
   createPost,
   getPosts ,
@@ -291,5 +325,6 @@ module.exports = {
   likePost,
   unlikePost,
   commentonPost,
-  getAuthorPosts
+  getAuthorPosts,
+  deletePost
 };

@@ -1,5 +1,5 @@
 const express = require('express');
-const { createPost,getPosts ,getUserPosts ,getCategoryPost,getPostById ,likePost ,unlikePost , commentonPost , getAuthorPosts} = require('../controllers/postControllers');
+const { createPost,getPosts ,getUserPosts ,getCategoryPost,getPostById ,likePost ,unlikePost , commentonPost , getAuthorPosts , deletePost} = require('../controllers/postControllers');
 const router = express.Router();
 const {verify} = require('../middleware/verifyToken');
 const multer = require('multer');
@@ -25,6 +25,7 @@ router.get('/post/:id' , getPostById);
 router.get('/like/:id' , verify, likePost);
 router.get('/unlike/:id' , verify, unlikePost);
 router.post('/comment/:id' , verify, commentonPost);
+router.delete('/delete/:id' , verify, deletePost);
 
 
 module.exports = router;

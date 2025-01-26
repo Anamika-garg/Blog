@@ -31,7 +31,7 @@ const SignUpWithGoogle = () => {
                     console.log(res);
                     toast(res.data.success);
                     login(res.data.token, res.data.user)
-                    // toast(res.data.success);
+                    toast(res.data.success);
                     setTimeout(() => {
                         navigate('/');
                     }, 1500)

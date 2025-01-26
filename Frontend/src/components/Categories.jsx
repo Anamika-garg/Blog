@@ -62,9 +62,8 @@ const Categories = () => {
             <MdOutlineArrowDropDown className='lg:hidden h-[20px] w-[20px]' onClick={() => setDrop(!drop)} />
         }
       </div>
-      <div className="container min-h-[30vh] w-[80vw] m-auto mt-[27px]">
-        <ToastContainer />
-        <div className="container min-h-[10vh] w-[80vw] m-auto mt-[27px] flex justify-center flex-wrap gap-[40px] pb-5">
+      {/* <div className="container min-h-[30vh] w-[80vw] m-auto mt-[27px]"> */}
+        <div className="container min-h-[10vh] w-[80vw] m-auto mt-[27px] items-center flex justify-center flex-wrap gap-[40px] pb-5">
           {
             posts && posts.length >0 ? posts.map((e, i) => {
               return <BlogComp key={i} blog={e} />
@@ -74,7 +73,7 @@ const Categories = () => {
             </div> 
           }
         </div>
-      </div>
+      {/* </div> */}
     </>
   )
 }

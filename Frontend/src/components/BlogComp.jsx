@@ -1,11 +1,15 @@
 import React, { useEffect, useState } from 'react'
 import bg from '/1.jpg'
 import author from '/author.jpg'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import { formatDistanceToNow } from "date-fns";
+import { toast, ToastContainer } from 'react-toastify'
+import { useAuth } from '../../Context/AuthContext'
 
-const BlogComp = ({ blog }) => {
+const BlogComp = ({ blog , type }) => {
+    const navigate = useNavigate();
+    const {token} = useAuth()
     useEffect(() => {
         fetchDetails();
     },[])
@@ -23,11 +27,32 @@ const BlogComp = ({ blog }) => {
             console.log(err);
         }
     }
+
+    const deletePost = async(e) =>{
+        e.preventDefault();
+        try{
+            const res = await axios.delete(`${import.meta.env.VITE_BACKEND_POST_URL}/delete/${blog._id}` , {
+                headers : {
+                    Authorization : `Bearer ${token}`
+                }
+            });
+            console.log(res);
+            toast.success(res.data.success);
+            setTimeout(()=>{
+                navigate('/profile');
+            },1400)
+        }
+        catch(err){
+            console.log(err);
+            toast.error(err.response.data.error || "Some Error Occured deleting the post")
+        }
+    }
     return (
         <>
             <Link to={`/Blog/${blog._id}`}>
-            <div className="blog box-shadow min-h-[350px] md:w-[350px] w-[300px] bg-white rounded-md overflow-hidden border border-slate-300 cursor-pointer">
-                <div className="img-con w-[100%] relative h-[200px] rounded-md">
+            <ToastContainer/>
+            <div className="blog box-shadow h-[350px] md:w-[350px] w-[300px] lg:w-[320px] bg-white rounded-md overflow-hidden border border-slate-300 cursor-pointer">
+                <div className="img-con w-[100%] relative h-[200px] rounded-md overflow-hidden">
                     <img src={blog.thumbnail} alt="" className='absolute h-[100%] w-[100%]' />
 
                 </div>
@@ -36,16 +61,26 @@ const BlogComp = ({ blog }) => {
                         <span className='ml-2 text-[13px] font-semibold px-2 py-1 flex items-center justify-center text-white rounded-[6px] bg-slate-800'>{blog.category}</span>
                         <span className='ml-2 text-[15px] font-semibold p-1 text-slate-500'>({formattedTime})</span>
                     </div>
-                        <h1 className={`ml-2 text-xl font-semibold hover:underline transition-all`}>{blog.title.slice(0, 30)}...</h1>
-                        <p className='ml-2 text-[14px]'  dangerouslySetInnerHTML={{ __html: `${blog.desc.slice(0, 40)}..`}}></p>
+                        <h1 className={`ml-2 text-xl font-semibold hover:underline transition-all`}>{blog.title.slice(0, 20)}...</h1>
+                        <p className='ml-2 text-[14px]'  dangerouslySetInnerHTML={{ __html: `${blog.desc.length < 20 ? blog.desc : blog.desc.slice(0, 15)}...`}}></p>
                     
                 </div>
 
-                <div className="author flex w-full relative h-[50px] gap-[6px] items-center">
+                <div className="author flex relative h-[50px] gap-[6px] self-center justify-self-center flex-wrap items-center w-[90%] justify-between">
+                    <span className='flex gap-[6px]'>
                     <div className="image rounded-full h-[30px] w-[30px] ml-2">
                         <img src={author.Avatar} alt="" className='relative h-[100%] w-[100%] rounded-full' />
                     </div>
                     <div className="name">By: {author.fullName}</div>
+                    </span>
+                {
+                        type == 'my' ? <>
+                        <div className="flex relative right-0 items-center justify-center gap-[4px]">
+                            {/* <button className='px-2 py-1 bg-green-400 rounded-md'>Edit</button> */}
+                            <button className='px-2 py-1 bg-red-400 rounded-md' onClick={deletePost}>Delete</button>
+                        </div>
+                        </> : <></>
+                    }
                 </div>
             </div>
             </Link>

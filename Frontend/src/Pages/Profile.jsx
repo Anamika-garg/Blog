@@ -87,7 +87,7 @@ const Profile = () => {
     updatedData.append('newPassword', formData.newPassword)
     updatedData.append('confirmNewPassword', formData.confirmNewPassword)
     try {
-      const res = await axios.post(`${import.meta.env.VITE_BACKEND_USER_URL}/update`, updatedData, {
+      const res = await axios.put(`${import.meta.env.VITE_BACKEND_USER_URL}/update`, updatedData, {
         headers: {
           "Content-Type": 'application/json',
           Authorization: `Bearer ${localStorage.getItem('authToken')}`

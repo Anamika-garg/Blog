@@ -23,7 +23,15 @@ const PostsBy = () => {
                     }
                 });
                 console.log(res)
-                setPosts(res.data.Posts);
+                if(res.data.Posts.length > 0){
+                    setPosts(res.data.Posts);
+                }
+                else{
+                    toast.error(`No Posts by ${location.state.name}`)
+                    setTimeout(()=>{
+                        navigate('/authors')
+                    },1000)
+                }
             }
             else{
                 const res = await axios.get(`${import.meta.env.VITE_BACKEND_POST_URL}/getAuthorPosts/${location.state.id}`);
@@ -42,7 +50,17 @@ const PostsBy = () => {
         }
         catch (err) {
             console.log(err);
-            toast.error(err.response.data.error)
+            toast.error(err.response.data.error);
+            if(err.status == 404){
+                setTimeout(()=>{
+                    if(location.state.name == 'Me'){
+                        navigate('/profile')
+                    }
+                    else{
+                        navigate('/authors');
+                    }
+                },1000)
+            }
         }
     }
     return (
@@ -53,7 +71,7 @@ const PostsBy = () => {
                 <div className="container min-h-[10vh] w-[80vw] m-auto mt-[27px] flex justify-center flex-wrap gap-[40px] pb-5">
                 {
                     posts.length > 0 ? posts.map((e, i) => {
-                        return <BlogComp key={i} blog={e} />
+                        return <BlogComp key={i} blog={e} type={'my'} />
                     }) :
                         <div className='text-center font-semibold text-blue-900 mt-[30px]'>
                             <AnimatedSVG/>
