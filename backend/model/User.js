@@ -11,7 +11,6 @@ const userSchema = new mongoose.Schema({
     },
     password : {
         type : String,
-        required :true
     },
     Liked : {
         type : Number,
@@ -24,6 +23,9 @@ const userSchema = new mongoose.Schema({
     NoOfPosts : {
         type : Number,
         default : 0,
+    },
+    providerId : {
+        type : String
     }
 })
 

@@ -10,7 +10,7 @@ const Author = ({author}) => {
   return (
     <>
       <div className="author min-h-[90px] w-[280px] relative bg-white flex rounded-[10px] items-center gap-4 box-shadow p-4">
-          <div className="image min-h-[90px] relative w-[100px] ml-2 bg-red-700 rounded-md overflow-hidden">
+          <div className="image min-h-[90px] relative w-[100px] ml-2 rounded-md overflow-hidden">
             <img src={author.Avatar} alt="" className='relative h-[90px] w-[100%] rounded-md' />
           </div>
           <div className="info min-h-[90px] relative">

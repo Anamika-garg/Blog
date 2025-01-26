@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const { User } = require('./User');
 
 const postSchema = new mongoose.Schema({
     title :{
@@ -19,6 +20,7 @@ const postSchema = new mongoose.Schema({
     },
     authorId:{
         type : mongoose.Types.ObjectId,
+        ref : User,
         required : true,
     },
     Likes:{

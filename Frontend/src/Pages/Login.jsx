@@ -3,6 +3,7 @@ import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { ToastContainer, toast } from 'react-toastify';
 import { useAuth } from '../../Context/AuthContext';
+import SignUpWithGoogle from '../components/SignUpWithGoogle';
 
 
 const Login = () => {
@@ -55,7 +56,10 @@ const Login = () => {
                         <label htmlFor="email" className='w-[90px] relative font-semibold'>Password : </label>
                         <input type="password" placeholder='Enter your Password' className='p-3 border-2 w-[80%] relative h-[50px]' name='password' value={formData.password} onChange={changeHandler} />
                     </div>
-                    <button className='bg-blue-400 font-semibold text-black w-[150px] px-4 py-2 rounded-md hover:bg-blue-500 transition-all' onClick={submitHandler}>Login</button>
+                    <div className="btn flex flex-wrap gap-[10px]">
+                        <button className='bg-blue-400 font-semibold text-black w-[150px] px-4 py-1 rounded-md hover:bg-blue-500 transition-all' onClick={submitHandler}>Login</button>
+                        <SignUpWithGoogle type={'login'} />
+                    </div>
                     <small>Don't have an account? <Link to={'/signup'} className="text-blue-600">Sign Up</Link> here</small>
                 </div>
             </div>

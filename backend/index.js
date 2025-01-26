@@ -14,7 +14,7 @@ app.use(express.urlencoded({extended : false}));
 //     credentials: true, 
 //   };
   
-  app.use(cors());
+app.use(cors());
 
 mongoose.connect(process.env.MONGO_URI).then(()=>{
     console.log("Connected to database");

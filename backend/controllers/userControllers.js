@@ -2,34 +2,36 @@ const bcrypt = require("bcryptjs");
 const { User } = require("../model/User");
 const jwt = require("jsonwebtoken");
 const { Post } = require("../model/Post");
-const axios = require('axios')
+const axios = require("axios");
 
 // Register User
 // /api/user/register
 async function register(req, res, next) {
-  console.log(req.body)
-  const { fullName, email, password, confirmPassword } = req.body;
-  if (!fullName || !email || !password || !confirmPassword) {
-    return res.status(422).json({
-      error: "Kindly fill all the details!",
-    });
-  }
-  if (!email.includes("@")) {
-    return res.status(422).json({
-      error: "Invalid Email Id",
-    });
-  }
-  if (!(password.length > 8)) {
-    return res.status(422).json({
-      error: "Passwords must have 8 characters",
-    });
-  }
-  if (password != confirmPassword) {
-    return res.status(422).json({
-      error: "Passwords do not match!",
-    });
-  }
+  console.log(req.body);
+  const { fullName, email, password, confirmPassword, providerId } = req.body;
+  if (!providerId) {
+    if (!fullName || !email || !password || !confirmPassword) {
+      return res.status(422).json({
+        error: "Kindly fill all the details!",
+      });
+    }
 
+    if (!email.includes("@")) {
+      return res.status(422).json({
+        error: "Invalid Email Id",
+      });
+    }
+    if (!(password.length > 8)) {
+      return res.status(422).json({
+        error: "Passwords must have 8 characters",
+      });
+    }
+    if (password != confirmPassword) {
+      return res.status(422).json({
+        error: "Passwords do not match!",
+      });
+    }
+  }
   try {
     const emailExists = await User.findOne({ email });
     if (emailExists) {
@@ -39,23 +41,42 @@ async function register(req, res, next) {
     }
 
     const randomPhotoUrl = await axios.get(`${process.env.RANDOM_IMAGE_URL}`);
+    if (!providerId) {
+      const salt = await bcrypt.genSalt(10);
+      const hashedPassword = await bcrypt.hash(password, salt);
 
-    const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(password, salt);
+      const newUser = new User({
+        fullName,
+        email: email.toLowerCase(),
+        password: hashedPassword,
+        Avatar: randomPhotoUrl.data.message,
+      });
+      await newUser.save();
+    } else {
+      const newUser = new User({
+        fullName,
+        email: email.toLowerCase(),
+        Avatar: randomPhotoUrl.data.message,
+        providerId,
+      });
+      await newUser.save();
+    }
 
-    const newUser = new User({
-      fullName,
-      email: email.toLowerCase(),
-      password: hashedPassword,
-      Avatar : randomPhotoUrl.data.message
+    const payload = {
+      id: userExists._id,
+      email,
+    };
+    const token = jwt.sign(payload, process.env.JWT_SECRET, {
+      expiresIn: "1d",
     });
-    await newUser.save();
 
     return res.status(201).json({
       success: "Registration Successfull",
       user: newUser,
+      token,
     });
   } catch (err) {
+    console.log(err);
     return res.status(400).json({
       error: "Some Internal Error Occured",
     });
@@ -66,32 +87,54 @@ async function register(req, res, next) {
 // /api/user/login
 async function login(req, res, next) {
   try {
-    const { email, password } = req.body;
-    if (!email || !password) {
-      return res.status(422).json({
-        error: "Fill all the fields!",
-      });
-    }
-    if (!email.includes("@")) {
-      return res.status(422).json({
-        error: "Invalid Email ID",
-      });
+    const { email, password, providerId } = req.body;
+    console.log(req.body);
+    if (!providerId) {
+      if (!email || !password) {
+        return res.status(422).json({
+          error: "Fill all the fields!",
+        });
+      }
+      if (!email.includes("@")) {
+        return res.status(422).json({
+          error: "Invalid Email ID",
+        });
+      }
     }
 
-    const userExists = await User.findOne({ email : email.toLowerCase() });
+    const userExists = await User.findOne({ email: email.toLowerCase() });
     if (!userExists) {
       return res.status(422).json({
         error: "No such user exists!",
       });
     }
 
-    const hashedPassword = await bcrypt.compare(password, userExists.password);
-    if (hashedPassword) {
+    if (!providerId) {
+      const hashedPassword = await bcrypt.compare(
+        password,
+        userExists.password
+      );
+      if (hashedPassword) {
+        const payload = {
+          id: userExists._id,
+          email,
+        };
+        const token = jwt.sign(payload, process.env.JWT_SECRET, {
+          expiresIn: "1d",
+        });
+        return res.status(200).json({
+          success: "Login Successful!",
+          user: userExists,
+          token,
+        });
+      }
+    }
+    else{
       const payload = {
         id: userExists._id,
         email,
       };
-
+  
       const token = jwt.sign(payload, process.env.JWT_SECRET, {
         expiresIn: "1d",
       });
@@ -101,6 +144,7 @@ async function login(req, res, next) {
         token,
       });
     }
+    
     return res.status(422).json({
       error: "Invalid Credentials",
     });
@@ -128,7 +172,8 @@ async function update(req, res, next) {
       fullName,
       currentPassword,
       newPassword,
-      confirmNewPassword)
+      confirmNewPassword
+    );
     if (
       !email ||
       !fullName ||
@@ -159,7 +204,7 @@ async function update(req, res, next) {
     const user = req.user;
     console.log(user);
 
-    if(email == user.email){
+    if (email == user.email) {
       const passwordCompare = await bcrypt.compare(
         currentPassword,
         user.password
@@ -169,15 +214,15 @@ async function update(req, res, next) {
           error: "Incorrect Current Password!",
         });
       }
-  
+
       const salt = await bcrypt.genSalt(10);
       const hashedPassword = await bcrypt.hash(newPassword, salt);
-  
-      const update = await User.findByIdAndUpdate(user._id ,{
+
+      const update = await User.findByIdAndUpdate(user._id, {
         fullName,
         password: hashedPassword,
       });
-  
+
       if (update) {
         updatedUser = await User.findById(user._id);
         return res.status(200).json({
@@ -188,19 +233,16 @@ async function update(req, res, next) {
       return res.status(200).json({
         error: "Error updating the profile",
       });
-    }
-    else{
+    } else {
       return res.status(404).json({
         error: "Invalid Email, You can't change the emailId",
       });
     }
-
-    
   } catch (err) {
-    console.log(err)
+    console.log(err);
     return res.status(400).json({
       error: "Error updating the profile, please try again",
-      err
+      err,
     });
   }
 }
@@ -210,7 +252,7 @@ async function update(req, res, next) {
 
 async function getAuthors(req, res, next) {
   try {
-    const Authors = await User.find().sort({NoOfPosts : -1});
+    const Authors = await User.find().sort({ NoOfPosts: -1 });
     console.log(Authors);
     if (Authors) {
       return res.status(200).json({
@@ -232,48 +274,44 @@ async function getAuthors(req, res, next) {
 // Profile details
 // /api/user/profile
 
-async function profile(req,res,next){
-  try{
+async function profile(req, res, next) {
+  try {
     const user = req.user;
     const userInfo = {
-      fullName : user.fullName,
-      email : user.email,
-      avatar : user.Avatar
-    }
+      fullName: user.fullName,
+      email: user.email,
+      avatar: user.Avatar,
+    };
     res.status(200).json({
-      success : "information fetched successfully",
-      user : userInfo
-    })
-  }
-  catch(err){
+      success: "information fetched successfully",
+      user: userInfo,
+    });
+  } catch (err) {
     console.log(err);
     res.status(400).json({
-      error : "Can't fetch your details",
-      err
-    })
+      error: "Can't fetch your details",
+      err,
+    });
   }
-
-
 }
 
 //profile by id
 // /api/user/author/:id
-async function authorById(req,res,next) {
-  try{
+async function authorById(req, res, next) {
+  try {
     const id = req.params;
-    
+
     const user = await User.findById(id.id);
     res.status(200).json({
-      success : "information fetched successfully",
-      user
-    })
-  }
-  catch(err){
+      success: "information fetched successfully",
+      user,
+    });
+  } catch (err) {
     console.log(err);
     res.status(400).json({
-      error : "Can't fetch the details",
-      err
-    })
+      error: "Can't fetch the details",
+      err,
+    });
+  }
 }
-}
-module.exports = { register, login, update, getAuthors ,profile , authorById};
+module.exports = { register, login, update, getAuthors, profile, authorById };
