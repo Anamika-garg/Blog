@@ -59,9 +59,9 @@ const Blog = () => {
         setMyComment(e.target.value);
     }
 
-    // useEffect(() => {
-    //     fetchDetails();
-    // }, [like]);
+    useEffect(() => {
+        fetchDetails();
+    }, []);
 
     async function fetchDetails() {
         try {
@@ -97,7 +97,7 @@ const Blog = () => {
                 }
             })
             console.log(res)
-            setCommentData([...commentData , res.data.newComment]);
+            // setCommentData([...commentData , res.data.newComment]);
         }
         catch (err) {
             console.log(err);
@@ -130,7 +130,7 @@ const Blog = () => {
                             </div>
                         </div>
                         <div className="blog-con container mx-auto lg:w-[70%] relative bg-white min-h-[60vh] z-5 top-[-30px] lg:top-[-80px] rounded-sm flex flex-col border-4">
-                            <div className="img-con h-[40vh] md:w-[100%] w-[90%] mx-auto relative bg-slate-500">
+                            <div className="img-con h-[42vh] md:w-[100%] w-[90%] mx-auto relative">
                                 <img src={postData.thumbnail} alt="" className='h-[100%] w-[100%]' />
                             </div>
 

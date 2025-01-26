@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import { FcGoogle } from "react-icons/fc";
 
 
-const SignUpWithGoogle = ({type}) => {
+const SignUpWithGoogle = () => {
     const {login} = useAuth();
     const navigate = useNavigate();
     async function googleSignInHandler(e) {
@@ -17,11 +17,10 @@ const SignUpWithGoogle = ({type}) => {
 
         if (result) {
             try {
-                if(type == 'signup'){
-                    const res = await axios.post(`${import.meta.env.VITE_BACKEND_USER_URL}/register`, {
+                    const res = await axios.post(`${import.meta.env.VITE_BACKEND_USER_URL}/continueWithGoogle`, {
                         email: result.user.email,
                         fullName: result.user.displayName,
-                        photoUrl: result.user.photoURL,
+                        photoURL: result.user.photoURL,
                         providerId: result.providerId
                     }, {
                         headers: {
@@ -36,25 +35,6 @@ const SignUpWithGoogle = ({type}) => {
                     setTimeout(() => {
                         navigate('/');
                     }, 1500)
-                }
-                else{
-                    const res = await axios.post(`${import.meta.env.VITE_BACKEND_USER_URL}/login`, {
-                        email: result.user.email,
-                        providerId: result.providerId
-                    }, {
-                        headers: {
-                            "Content-Type": 'application/json',
-                        }
-                    })
-    
-                    console.log(res);
-                    toast(res.data.success);
-                    login(res.data.token, res.data.user)
-                    // toast(res.data.success);
-                    setTimeout(() => {
-                        navigate('/');
-                    }, 1500)
-                }
 
             
             }
@@ -73,9 +53,7 @@ return (
         <ToastContainer />
         <button className='border-blue-400 border-2 font-semibold flex items-center justify-center text-black px-4 py-2 rounded-md hover:bg-blue-300 transition-all' onClick={googleSignInHandler}>
             <FcGoogle className='inline h-[30px] w-[30px] mr-2 '/>
-            {
-                type == 'login' ? `Login With Google` : `Sign Up with Google`
-            }
+            Continue With Google
             </button>
     </>
 )

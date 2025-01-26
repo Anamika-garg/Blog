@@ -58,7 +58,7 @@ const Login = () => {
                     </div>
                     <div className="btn flex flex-wrap gap-[10px]">
                         <button className='bg-blue-400 font-semibold text-black w-[150px] px-4 py-1 rounded-md hover:bg-blue-500 transition-all' onClick={submitHandler}>Login</button>
-                        <SignUpWithGoogle type={'login'} />
+                        <SignUpWithGoogle />
                     </div>
                     <small>Don't have an account? <Link to={'/signup'} className="text-blue-600">Sign Up</Link> here</small>
                 </div>

@@ -7,30 +7,27 @@ const axios = require("axios");
 // Register User
 // /api/user/register
 async function register(req, res, next) {
-  console.log(req.body);
-  const { fullName, email, password, confirmPassword, providerId } = req.body;
-  if (!providerId) {
-    if (!fullName || !email || !password || !confirmPassword) {
-      return res.status(422).json({
-        error: "Kindly fill all the details!",
-      });
-    }
+  const { fullName, email, password, confirmPassword} = req.body;
+  if (!fullName || !email || !password || !confirmPassword) {
+    return res.status(422).json({
+      error: "Kindly fill all the details!",
+    });
+  }
 
-    if (!email.includes("@")) {
-      return res.status(422).json({
-        error: "Invalid Email Id",
-      });
-    }
-    if (!(password.length > 8)) {
-      return res.status(422).json({
-        error: "Passwords must have 8 characters",
-      });
-    }
-    if (password != confirmPassword) {
-      return res.status(422).json({
-        error: "Passwords do not match!",
-      });
-    }
+  if (!email.includes("@")) {
+    return res.status(422).json({
+      error: "Invalid Email Id",
+    });
+  }
+  if (!(password.length > 8)) {
+    return res.status(422).json({
+      error: "Passwords must have 8 characters",
+    });
+  }
+  if (password != confirmPassword) {
+    return res.status(422).json({
+      error: "Passwords do not match!",
+    });
   }
   try {
     const emailExists = await User.findOne({ email });
@@ -41,29 +38,19 @@ async function register(req, res, next) {
     }
 
     const randomPhotoUrl = await axios.get(`${process.env.RANDOM_IMAGE_URL}`);
-    if (!providerId) {
-      const salt = await bcrypt.genSalt(10);
-      const hashedPassword = await bcrypt.hash(password, salt);
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
 
-      const newUser = new User({
-        fullName,
-        email: email.toLowerCase(),
-        password: hashedPassword,
-        Avatar: randomPhotoUrl.data.message,
-      });
-      await newUser.save();
-    } else {
-      const newUser = new User({
-        fullName,
-        email: email.toLowerCase(),
-        Avatar: randomPhotoUrl.data.message,
-        providerId,
-      });
-      await newUser.save();
-    }
+    const newUser = new User({
+      fullName,
+      email: email.toLowerCase(),
+      password: hashedPassword,
+      Avatar: randomPhotoUrl.data.message,
+    });
+    await newUser.save();
 
     const payload = {
-      id: userExists._id,
+      id: emailExists._id,
       email,
     };
     const token = jwt.sign(payload, process.env.JWT_SECRET, {
@@ -87,19 +74,16 @@ async function register(req, res, next) {
 // /api/user/login
 async function login(req, res, next) {
   try {
-    const { email, password, providerId } = req.body;
-    console.log(req.body);
-    if (!providerId) {
-      if (!email || !password) {
-        return res.status(422).json({
-          error: "Fill all the fields!",
-        });
-      }
-      if (!email.includes("@")) {
-        return res.status(422).json({
-          error: "Invalid Email ID",
-        });
-      }
+    const { email, password } = req.body;
+    if (!email || !password) {
+      return res.status(422).json({
+        error: "Fill all the fields!",
+      });
+    }
+    if (!email.includes("@")) {
+      return res.status(422).json({
+        error: "Invalid Email ID",
+      });
     }
 
     const userExists = await User.findOne({ email: email.toLowerCase() });
@@ -109,32 +93,12 @@ async function login(req, res, next) {
       });
     }
 
-    if (!providerId) {
-      const hashedPassword = await bcrypt.compare(
-        password,
-        userExists.password
-      );
-      if (hashedPassword) {
-        const payload = {
-          id: userExists._id,
-          email,
-        };
-        const token = jwt.sign(payload, process.env.JWT_SECRET, {
-          expiresIn: "1d",
-        });
-        return res.status(200).json({
-          success: "Login Successful!",
-          user: userExists,
-          token,
-        });
-      }
-    }
-    else{
+    const hashedPassword = await bcrypt.compare(password, userExists.password);
+    if (hashedPassword) {
       const payload = {
         id: userExists._id,
         email,
       };
-  
       const token = jwt.sign(payload, process.env.JWT_SECRET, {
         expiresIn: "1d",
       });
@@ -144,13 +108,74 @@ async function login(req, res, next) {
         token,
       });
     }
-    
+
     return res.status(422).json({
       error: "Invalid Credentials",
     });
   } catch (err) {
     return res.status(400).json({
       error: "Error Login, please try again",
+    });
+  }
+}
+
+async function continueWithGoogle(req, res, next) {
+  const { providerId, email, fullName,photoURL } = req.body;
+  if (!providerId || !email || !fullName) {
+    return res.status(422).json({
+      error: "No proper info",
+    });
+  }
+  try {
+    const emailExists = await User.findOne({ email });
+
+    if (!emailExists) {
+      const randomPhotoUrl = await axios.get(`${process.env.RANDOM_IMAGE_URL}`);
+      const newUser = new User({
+        email,
+        fullName,
+        providerId,
+        Avatar: randomPhotoUrl.data.message,
+        photoURL
+      });
+
+      newUser.save();
+
+      const payload = {
+        id: newUser._id,
+        email,
+      };
+
+      const token = jwt.sign(payload, process.env.JWT_SECRET, {
+        expiresIn: "1d",
+      });
+
+      return res.status(200).json({
+        success: "Success",
+        user: newUser,
+        token,
+      });
+    } else {
+      const payload = {
+        id: emailExists._id,
+        email,
+      };
+
+      const token = jwt.sign(payload, process.env.JWT_SECRET, {
+        expiresIn: "1d",
+      });
+
+      return res.status(200).json({
+        success: "Success",
+        user: emailExists,
+        token,
+      });
+    }
+  } catch (err) {
+    console.log(err);
+    return res.status(400).json({
+      error: "Try Again , Some Error Occured",
+      err,
     });
   }
 }
@@ -314,4 +339,12 @@ async function authorById(req, res, next) {
     });
   }
 }
-module.exports = { register, login, update, getAuthors, profile, authorById };
+module.exports = {
+  register,
+  login,
+  update,
+  getAuthors,
+  profile,
+  authorById,
+  continueWithGoogle,
+};

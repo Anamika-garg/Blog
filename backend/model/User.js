@@ -26,6 +26,9 @@ const userSchema = new mongoose.Schema({
     },
     providerId : {
         type : String
+    },
+    photoURL : {
+        type : String,
     }
 })
 
