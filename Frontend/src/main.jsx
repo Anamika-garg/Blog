@@ -28,6 +28,7 @@ createRoot(document.getElementById('root')).render(
           <Route path='/profile' element={<Profile />} />
           <Route path='/blog/:id' element={<Blog />} />
           <Route path='/posts' element={<PostsBy />} />
+          <Route path='*' element={<Error />} />
         </Route>
       </Routes>
     </BrowserRouter>

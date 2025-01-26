@@ -59,9 +59,9 @@ const Blog = () => {
         setMyComment(e.target.value);
     }
 
-    useEffect(() => {
-        fetchDetails();
-    }, [like]);
+    // useEffect(() => {
+    //     fetchDetails();
+    // }, [like]);
 
     async function fetchDetails() {
         try {
@@ -96,13 +96,16 @@ const Blog = () => {
                     "Authorization": `Bearer ${localStorage.getItem('authToken')}`
                 }
             })
-            // console.log(res)
+            console.log(res)
+            setCommentData([...commentData , res.data.newComment]);
         }
         catch (err) {
             console.log(err);
             toast.error("Can't Add your Comment")
         }
-        fetchDetails();
+        // fetchDetails();
+
+
         setMyComment('')
     }
     return (

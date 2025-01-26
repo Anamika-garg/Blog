@@ -78,7 +78,7 @@ async function login(req, res, next) {
       });
     }
 
-    const userExists = await User.findOne({ email });
+    const userExists = await User.findOne({ email : email.toLowerCase() });
     if (!userExists) {
       return res.status(422).json({
         error: "No such user exists!",
