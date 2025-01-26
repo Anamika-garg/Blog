@@ -97,7 +97,7 @@ const Blog = () => {
                 }
             })
             console.log(res)
-            // setCommentData([...commentData , res.data.newComment]);
+            setCommentData([...commentData , res.data.newComment]);
         }
         catch (err) {
             console.log(err);
